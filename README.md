@@ -54,13 +54,7 @@ Architektura została zaprojektowana tak, aby:
 - **`src`** – główne projekty biblioteczne
   - `'SentinelWaf.Domain'` – definicje modeli, value objects, enumów i wyników detekcji. Czysta logika domenowa, bez zależności od frameworków.  
   - `'SentinelWaf.Application'` – serce systemu. Zawiera:
-    - `'Abstractions'` – kontrakty (`IRequestAnalysisService`, `IDetectionPipeline`, `IThreatDetectionEngine`)  
-    - `'UseCases'` – implementacja przypadków użycia (`RequestAnalysisService`)  
-    - `'Pipelines'` – orkiestracja silników detekcji (`DetectionPipeline`)  
   - `'SentinelWaf.Infrastructure'` – implementacja silników detekcji i szczegóły techniczne:
-    - `'DetectionEngines/RegexEngine'` – silnik sygnaturowy z regułami i opcjami czułości  
-    - `'Telemetry'` – zbieranie metryk i czasu wykonania  
-    - `'Options'` – konfiguracje np. `SignatureDetectionOptions`  
   - `'SentinelWaf.Middleware'` – integracja z ASP.NET Core. Przechwytuje requesty, wywołuje Use Case, podejmuje decyzję o blokowaniu lub przepuszczeniu żądania.
 
 - **`playground`** – środowisko testowe / aplikacja „ofiara”
