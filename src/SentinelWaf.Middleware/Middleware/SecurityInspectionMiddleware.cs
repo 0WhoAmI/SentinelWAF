@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Http;
 using SentinelWaf.Application.Interfaces;
-using SentinelWaf.Domain.Enums;
 using SentinelWaf.Domain.Models;
 using System.Text;
 using System.Text.Json;
@@ -49,7 +48,7 @@ namespace SentinelWaf.Middleware.Middleware
             var result = detector.Analyze(requestModel);
 
             // 4. LOGIKA ODRZUCANIA ZAPYTAÑ
-            if (result.IsAttack && (result.Level == ThreatLevel.High || result.Level == ThreatLevel.Medium))
+            if (result.IsAttack)
             {
                 context.Response.StatusCode = StatusCodes.Status403Forbidden;
                 context.Response.ContentType = "application/json";
