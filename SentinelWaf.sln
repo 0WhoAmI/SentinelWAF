@@ -21,6 +21,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SentinelWaf.Tests", "tests\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VulnerableApi", "playground\VulnerableApi\VulnerableApi.csproj", "{F6F45F22-BB33-4A74-99E3-837E9988479E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{B17AC2E3-3EC8-4734-A8CF-AA35F908FE0E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SentinelWaf.MlTrainer", "tools\SentinelWaf.MlTrainer\SentinelWaf.MlTrainer.csproj", "{2DC3D400-D256-4013-A2DD-1D893295620D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -103,6 +107,18 @@ Global
 		{F6F45F22-BB33-4A74-99E3-837E9988479E}.Release|x64.Build.0 = Release|Any CPU
 		{F6F45F22-BB33-4A74-99E3-837E9988479E}.Release|x86.ActiveCfg = Release|Any CPU
 		{F6F45F22-BB33-4A74-99E3-837E9988479E}.Release|x86.Build.0 = Release|Any CPU
+		{2DC3D400-D256-4013-A2DD-1D893295620D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DC3D400-D256-4013-A2DD-1D893295620D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DC3D400-D256-4013-A2DD-1D893295620D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2DC3D400-D256-4013-A2DD-1D893295620D}.Debug|x64.Build.0 = Debug|Any CPU
+		{2DC3D400-D256-4013-A2DD-1D893295620D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2DC3D400-D256-4013-A2DD-1D893295620D}.Debug|x86.Build.0 = Debug|Any CPU
+		{2DC3D400-D256-4013-A2DD-1D893295620D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DC3D400-D256-4013-A2DD-1D893295620D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DC3D400-D256-4013-A2DD-1D893295620D}.Release|x64.ActiveCfg = Release|Any CPU
+		{2DC3D400-D256-4013-A2DD-1D893295620D}.Release|x64.Build.0 = Release|Any CPU
+		{2DC3D400-D256-4013-A2DD-1D893295620D}.Release|x86.ActiveCfg = Release|Any CPU
+		{2DC3D400-D256-4013-A2DD-1D893295620D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -114,6 +130,7 @@ Global
 		{721BF1AA-4B12-4130-8F46-E45D6DE37390} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{8C276003-93D6-C3AF-D364-373867133C00} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 		{F6F45F22-BB33-4A74-99E3-837E9988479E} = {12E5C810-18C6-BE57-4EA6-3F3BE821652E}
+		{2DC3D400-D256-4013-A2DD-1D893295620D} = {B17AC2E3-3EC8-4734-A8CF-AA35F908FE0E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4B629865-2AC0-4F9E-8FA3-45DB1F758BF5}

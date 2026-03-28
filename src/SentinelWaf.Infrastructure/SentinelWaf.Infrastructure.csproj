@@ -1,6 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.ML" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\SentinelWaf.Domain\SentinelWaf.Domain.csproj" />
     <ProjectReference Include="..\SentinelWaf.Application\SentinelWaf.Application.csproj" />
   </ItemGroup>
