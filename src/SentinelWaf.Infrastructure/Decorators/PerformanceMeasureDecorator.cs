@@ -29,12 +29,14 @@ namespace SentinelWaf.Infrastructure.Decorators
 
             // Zapisanie wyników
             PerformanceMetrics metrics = new PerformanceMetrics(
-                result.Method,
-                stopwatch.ElapsedMilliseconds,
-                result.IsAttack,
-                DateTime.UtcNow);
+                DetectionMethod: result.DetectionMethod,
+                ExecutionTimeMs: stopwatch.Elapsed.TotalMilliseconds,
+                IsAttack: result.IsAttack,
+                AttackType: result.AttackType,
+                Timestamp: DateTime.UtcNow
+            );
 
-            _metricsRepository.Save(metrics);
+            _ = Task.Run(() => _metricsRepository.SaveAsync(metrics));
 
             return result;
         }

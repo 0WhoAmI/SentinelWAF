@@ -3,9 +3,10 @@
 namespace SentinelWaf.Domain.Models
 {
     public record PerformanceMetrics(
-        DetectionMethod Method,
-        long ExecutionTimeMs,
-        bool WasAttackDetected,
+        DetectionMethod DetectionMethod,
+        double ExecutionTimeMs,
+        bool IsAttack,
+        AttackType AttackType,
         DateTime Timestamp
     );
 }

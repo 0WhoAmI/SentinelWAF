@@ -22,7 +22,7 @@ namespace SentinelWaf.Middleware.Extensions
             // Rejestracja detektora owiniêtego w dekorator mierz¹cy czas
             services.AddSingleton<IAttackDetector>(provider =>
             {
-                //var mlDetector = new MlNetDetector("C:\\Sciezka\\Do\\Twojego\\model.zip");
+                //var mlDetector = new MlNetDetector(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Detectors", "ML", "MLModels", "WafModel.zip"));
                 //var metricsRepo = provider.GetRequiredService<IMetricsRepository>();
                 //return new PerformanceMeasureDecorator(mlDetector, metricsRepo);
 

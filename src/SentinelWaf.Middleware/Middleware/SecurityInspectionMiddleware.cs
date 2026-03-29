@@ -56,8 +56,8 @@ namespace SentinelWaf.Middleware.Middleware
                 var responseJson = JsonSerializer.Serialize(new
                 {
                     error = "Access Denied. SentinelWAF blocked this request.",
-                    attackType = result.Type.ToString(),
-                    confidence = result.Level.ToString()
+                    attackType = result.AttackType.ToString(),
+                    confidence = result.ThreatLevel.ToString()
                 });
 
                 await context.Response.WriteAsync(responseJson);

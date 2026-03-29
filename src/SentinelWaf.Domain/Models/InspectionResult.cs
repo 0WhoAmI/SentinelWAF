@@ -4,8 +4,8 @@ namespace SentinelWaf.Domain.Models
 {
     public record InspectionResult(
         bool IsAttack,
-        ThreatLevel Level,
-        AttackType Type,
-        DetectionMethod Method
+        ThreatLevel ThreatLevel,
+        AttackType AttackType,
+        DetectionMethod DetectionMethod
     );
 }

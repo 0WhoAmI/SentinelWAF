@@ -4,6 +4,6 @@ namespace SentinelWaf.Application.Interfaces
 {
     public interface IMetricsRepository
     {
-        void Save(PerformanceMetrics metrics);
+        Task SaveAsync(PerformanceMetrics metrics);
     }
 }
