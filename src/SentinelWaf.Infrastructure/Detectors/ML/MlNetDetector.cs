@@ -23,6 +23,7 @@ namespace SentinelWaf.Infrastructure.Detectors.ML
             // 3. Tworzymy silnik predykcji, mówiąc mu jakich klas wejścia/wyjścia używamy
             _predictionEngine = mlContext.Model.CreatePredictionEngine<WafModelInput, WafModelOutput>(mlModel);
         }
+
         public InspectionResult Analyze(InspectionRequest request)
         {
             // Łączymy to, co chcemy sprawdzić (Body + QueryString)
@@ -31,28 +32,34 @@ namespace SentinelWaf.Infrastructure.Detectors.ML
             if (string.IsNullOrWhiteSpace(payloadToAnalyze))
                 return new InspectionResult(false, ThreatLevel.None, AttackType.None, DetectionMethod.MachineLearning);
 
-            // 1. Pakujemy nasz tekst w obiekt wejściowy
-            var input = new WafModelInput { Payload = payloadToAnalyze };
+            // Pakujemy nasz tekst w obiekt wejściowy
+            WafModelInput input = new WafModelInput { Payload = payloadToAnalyze };
 
-            // 2. PYTAMY SZTUCZNĄ INTELIGENCJĘ O ZDANIE! (magia dzieje się tutaj)
-            var prediction = _predictionEngine.Predict(input);
+            // PYTAMY SZTUCZNĄ INTELIGENCJĘ O ZDANIE
+            WafModelOutput prediction = _predictionEngine.Predict(input);
 
-            // 3. Tłumaczymy to, co wypluł model na nasz WAF-owy ThreatLevel
+            // Zamieniamy tekst od ML (np. "SqlInjection") na nasz Enum
+            Enum.TryParse<AttackType>(prediction.PredictedCategory, out var predictedAttackType);
+
+            // W Multiclass, najwyższa wartość w tablicy Scores to pewność (Confidence) przewidzianej klasy
+            float maxScore = prediction.Scores.Max();
+
+            // Tłumaczymy pewność na ThreatLevel
             ThreatLevel level;
-            if (prediction.Probability >= 0.90f)
-                level = ThreatLevel.High;    // AI jest na >90% pewne, że to atak
-            else if (prediction.Probability >= 0.70f)
-                level = ThreatLevel.Medium;  // AI uważa to za wysoce podejrzane
-            else if (prediction.Probability >= 0.50f)
-                level = ThreatLevel.Low;     // Pół na pół
+            if (predictedAttackType == AttackType.None)
+            {
+                level = ThreatLevel.None;
+            }
             else
-                level = ThreatLevel.None;    // AI uważa, że to bezpieczny ruch
+            {
+                if (maxScore >= 0.85f) level = ThreatLevel.High;
+                else if (maxScore >= 0.60f) level = ThreatLevel.Medium;
+                else level = ThreatLevel.Low;
+            }
 
             bool isAttack = level != ThreatLevel.None;
 
-            // Zwracamy piękny obiekt, z którym nasz Middleware będzie umiał pracować!
-            // Uwaga: Ponieważ klasyfikator jest binarny (zły/dobry), typ ataku to AnomalyUnknown
-            return new InspectionResult(isAttack, level, AttackType.AnomalyUnknown, DetectionMethod.MachineLearning);
+            return new InspectionResult(isAttack, level, predictedAttackType, DetectionMethod.MachineLearning);
         }
     }
 }

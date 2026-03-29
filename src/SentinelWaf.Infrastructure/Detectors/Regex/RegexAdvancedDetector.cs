@@ -8,7 +8,7 @@ namespace SentinelWaf.Infrastructure.Detectors.Regex
     public class RegexAdvancedDetector : IAttackDetector
     {
         // Ustawiamy limit czasu (Timeout) - przy tak skomplikowanych Regexach haker może użyć 
-        // ataku ReDoS (Regular Expression Denial of Service), żeby zawiesić serwer!
+        // ataku ReDoS (Regular Expression Denial of Service), żeby zawiesić serwer
         private static readonly TimeSpan RegexTimeout = TimeSpan.FromMilliseconds(500);
         private static readonly SystemRegex.Regex _sqliRegex = new SystemRegex.Regex(@"(?i)(?:['""]|%22|%27|%60|%2527)\s*(?:and|or|\|\||&&)\s*(?:['""]|%22|%27|%60|%2527)?\s*\d+\s*(?:=|=>|<=|<|>)\s*(?:['""]|%22|%27|%60|%2527)?\s*\d+|(?:\b(?:union\s+all\s+select|waitfor\s+delay|xp_cmdshell)\b)", SystemRegex.RegexOptions.Compiled, RegexTimeout);
         private static readonly SystemRegex.Regex _xssRegex = new SystemRegex.Regex(@"(?i)(?:<|[<]\s*)(?:script|object|embed|iframe|svg|math|marquee)(?:\s+|[^\w>]*)(?:.*?\s+)?(?:on[a-z]+|xmlns)\s*=\s*(?:['""]?[^>]*['""]?|[^>]*)(?:>|[>]\s*)", SystemRegex.RegexOptions.Compiled, RegexTimeout);

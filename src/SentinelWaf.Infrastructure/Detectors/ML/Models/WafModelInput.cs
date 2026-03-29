@@ -10,7 +10,6 @@ namespace SentinelWaf.Infrastructure.Detectors.ML.Models
         public string Payload { get; set; }
 
         [LoadColumn(1)]
-        [ColumnName("IsMalicious")] // Wymuszamy nazwę kolumny, żeby ML.NET łatwiej ją znalazł
-        public bool IsMalicious { get; set; }
+        public string Category { get; set; }
     }
 }

@@ -7,7 +7,7 @@ namespace SentinelWaf.Infrastructure.Detectors.Regex
 {
     public class RegexSimpleDetector : IAttackDetector
     {
-        // RegexOptions.Compiled jest kluczowe przy testach wydajnościowych!
+        // RegexOptions.Compiled jest kluczowe przy testach wydajnościowych
         private static readonly SystemRegex.Regex _sqliRegex = new SystemRegex.Regex(@"(?i)(select|drop|union|insert|delete|update)", SystemRegex.RegexOptions.Compiled);
         private static readonly SystemRegex.Regex _xssRegex = new SystemRegex.Regex(@"(?i)<script>", SystemRegex.RegexOptions.Compiled);
 
