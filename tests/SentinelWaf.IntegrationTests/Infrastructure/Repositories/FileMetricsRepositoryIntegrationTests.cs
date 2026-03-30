@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using SentinelWaf.Domain.Enums;
+using SentinelWaf.Domain.Helpers;
 using SentinelWaf.Domain.Models;
 using SentinelWaf.Infrastructure.Metrics;
 
@@ -21,7 +22,7 @@ namespace SentinelWaf.IntegrationTests.Infrastructure.Repositories
                 Timestamp: DateTime.UtcNow
             );
 
-            string expectedFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "waf_performance_metrics.csv");
+            string expectedFilePath = Path.Combine(OutputHelper.GetGlobalOutputDirectory(), "waf_performance_metrics.csv");
 
             // ACT
             await sut.SaveAsync(metrics);
