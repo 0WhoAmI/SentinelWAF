@@ -1,13 +1,4 @@
-﻿using FluentAssertions;
-using Microsoft.AspNetCore.Http;
-using Moq;
-using SentinelWaf.Application.Interfaces;
-using SentinelWaf.Domain.Enums;
-using SentinelWaf.Domain.Models;
-using SentinelWaf.Middleware.Extensions;
-using SentinelWaf.Middleware.Middleware;
-
-namespace SentinelWaf.UnitTests.Middleware
+﻿namespace SentinelWaf.UnitTests.Middleware
 {
     public class SentinelWafMiddlewareTests
     {

@@ -16,6 +16,7 @@ namespace SentinelWaf.UnitTests.Infrastructure.Detectors.Regex
 
         [Theory]
         [InlineData("UNION ALL SELECT null, version()", AttackType.SqlInjection)]
+        [InlineData("</script><script>alert(1)</script>", AttackType.CrossSiteScripting)]
         public void Analyze_WhenGivenMediumLevelAttack_ShouldReturnIsAttackTrue(string payload, AttackType expectedAttackType)
         {
             // ARRANGE

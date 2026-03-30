@@ -15,9 +15,15 @@ namespace SentinelWaf.UnitTests.Infrastructure.Detectors.Regex
         }
 
         [Theory]
+        // ZAAWANSOWANY XSS (Zaciemniony, bez spacji, dziwne tagi)
+        [InlineData("<svg/onload=alert(1)>", AttackType.CrossSiteScripting)]
         [InlineData("<img src=x onerror=prompt(document.cookie);>", AttackType.CrossSiteScripting)]
-        [InlineData("; rm -rf /", AttackType.CommandInjection)] // Próba usunięcia serwera (Linux)
-        [InlineData("127.0.0.1 | dir", AttackType.CommandInjection)] // Próba ataku na Windows
+        [InlineData("javascript://%250Aalert(1)", AttackType.CrossSiteScripting)]
+
+        // ZAAWANSOWANE SQLi (Time-based, stacked queries, procedury)
+        [InlineData("1' AND SLEEP(10)--", AttackType.SqlInjection)]
+        [InlineData("'; EXEC xp_cmdshell('dir')--", AttackType.SqlInjection)]
+        [InlineData("1' AND WAITFOR DELAY '0:0:5'--", AttackType.SqlInjection)]
         public void Analyze_WhenGivenAdvancedAttack_ShouldDetectHighThreat(string payload, AttackType expectedAttackType)
         {
             // ARRANGE
