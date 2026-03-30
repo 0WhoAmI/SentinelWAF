@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\SentinelWaf.Application\SentinelWaf.Application.csproj" />
     <ProjectReference Include="..\..\src\SentinelWaf.Infrastructure\SentinelWaf.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\SentinelWaf.Middleware\SentinelWaf.Middleware.csproj" />
   </ItemGroup>
 
 </Project>
