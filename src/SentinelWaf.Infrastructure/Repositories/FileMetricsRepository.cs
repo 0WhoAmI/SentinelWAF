@@ -14,7 +14,7 @@ namespace SentinelWaf.Infrastructure.Metrics
 
             if (!File.Exists(_filePath))
             {
-                File.WriteAllText(_filePath, "Timestamp,Method,ExecutionTimeMs,WasAttackDetected,AttackType\n");
+                File.WriteAllText(_filePath, "Timestamp,Method,ExecutionTimeMs,IsAttack,AttackType\n");
             }
         }
 

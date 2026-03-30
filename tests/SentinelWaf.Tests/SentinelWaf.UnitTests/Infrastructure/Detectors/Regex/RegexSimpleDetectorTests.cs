@@ -3,7 +3,7 @@ using SentinelWaf.Domain.Enums;
 using SentinelWaf.Domain.Models;
 using SentinelWaf.Infrastructure.Detectors.Regex;
 
-namespace SentinelWaf.UnitTests.Infrastructure.Detectors
+namespace SentinelWaf.UnitTests.Infrastructure.Detectors.Regex
 {
     public class RegexSimpleDetectorTests
     {
@@ -21,7 +21,14 @@ namespace SentinelWaf.UnitTests.Infrastructure.Detectors
         public void Analyze_WhenGivenMaliciousPayload_ShouldReturnIsAttackTrue(string payload, AttackType expectedAttackType)
         {
             // ARRANGE
-            var request = new InspectionRequest("http://api.com", payload, "", "GET");
+            var request = new InspectionRequest(
+                IpAddress: "192.168.1.100",
+                Method: "POST",
+                Path: "/api/comments",
+                QueryString: "",
+                Headers: "Content-Type: application/json",
+                Body: payload
+            );
 
             // ACT
             var result = _sut.Analyze(request);
@@ -35,7 +42,14 @@ namespace SentinelWaf.UnitTests.Infrastructure.Detectors
         public void Analyze_WhenGivenSafePayload_ShouldReturnIsAttackFalse()
         {
             // ARRANGE
-            var request = new InspectionRequest("http://api.com", "Jan Kowalski", "", "POST");
+            var request = new InspectionRequest(
+               IpAddress: "192.168.1.100",
+               Method: "POST",
+               Path: "/api/comments",
+               QueryString: "",
+               Headers: "Content-Type: application/json",
+               Body: "Jan Kowalski"
+           );
 
             // ACT
             var result = _sut.Analyze(request);

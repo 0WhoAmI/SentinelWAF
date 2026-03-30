@@ -25,7 +25,14 @@ namespace SentinelWaf.UnitTests.Application.Decorators
 
             // Tworzymy nasz prawdziwy dekorator, ale wstrzykujemy mu Kaskaderów!
             var sut = new PerformanceMeasureDecorator(fakeDetector.Object, fakeRepository.Object);
-            var request = new InspectionRequest("http://api.com", "test", "", "GET");
+            var request = new InspectionRequest(
+                IpAddress: "192.168.1.100",
+                Method: "POST",
+                Path: "/api/comments",
+                QueryString: "",
+                Headers: "Content-Type: application/json",
+                Body: ""
+            );
 
             // ACT
             var result = sut.Analyze(request);
@@ -33,7 +40,7 @@ namespace SentinelWaf.UnitTests.Application.Decorators
             // ASSERT
             result.Should().BeEquivalentTo(fakeResult); // Dekorator nie może zmieniać samego wyniku!
 
-            // Najważniejsze: Sprawdzamy, czy Dekorator wywołał metodę SaveAsync() na repozytorium dokładnie 1 raz!
+            // Sprawdzamy, czy Dekorator wywołał metodę SaveAsync() na repozytorium dokładnie 1 raz!
             fakeRepository.Verify(x => x.SaveAsync(
                 It.Is<PerformanceMetrics>(m => m.ExecutionTimeMs >= 0 && m.DetectionMethod == DetectionMethod.RegexSimple)
             ), Times.Once);

@@ -38,10 +38,12 @@ namespace SentinelWaf.Middleware.Middleware
             }
 
             var requestModel = new InspectionRequest(
-                context.Connection.RemoteIpAddress?.ToString() ?? "Unknown",
-                context.Request.Headers.ToString(),
-                bodyContent,
-                context.Request.QueryString.ToString()
+                IpAddress: context.Connection.RemoteIpAddress?.ToString() ?? "Unknown",
+                Method: context.Request.Method,
+                Path: context.Request.Path.ToString(),
+                QueryString: context.Request.QueryString.ToString(),
+                Headers: context.Request.Headers.ToString(),
+                Body: bodyContent
             );
 
             // 3. WYS£ANIE DO DETEKTORA (Tu dziej¹ siê pomiary i analiza)

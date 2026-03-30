@@ -1,3 +1,4 @@
+using SentinelWaf.Domain.Enums;
 using SentinelWaf.Middleware.Extensions;
 
 namespace VulnerableApi
@@ -13,7 +14,7 @@ namespace VulnerableApi
 
             builder.Services.AddOpenApi();
 
-            builder.Services.AddSentinelWaf();
+            builder.Services.AddSentinelWaf(DetectionMethod.RegexSimple);
 
             var app = builder.Build();
 

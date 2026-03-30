@@ -7,8 +7,15 @@ namespace SentinelWaf.Infrastructure.Detectors.Regex
 {
     public class RegexMediumDetector : IAttackDetector
     {
-        private static readonly SystemRegex.Regex _sqliRegex = new SystemRegex.Regex(@"(?i)(?:\b(select|update|insert|delete|drop)\b\s+.*\b(from|into|table)\b)|(?:[';]+\s*--+)", SystemRegex.RegexOptions.Compiled);
-        private static readonly SystemRegex.Regex _xssRegex = new SystemRegex.Regex(@"(?i)<(script|iframe|object|embed|svg).*?>|javascript:", SystemRegex.RegexOptions.Compiled);
+        private static readonly System.Text.RegularExpressions.Regex _sqliRegex =
+            new System.Text.RegularExpressions.Regex(
+                @"(?i)(?:\b(select|update|insert|delete|drop)\b.*\b(from|into|table)\b)|(?:\bunion\b.*\bselect\b)|(?:[';]+\s*(?:--|\#|\/\*))",
+                System.Text.RegularExpressions.RegexOptions.Compiled);
+
+        private static readonly System.Text.RegularExpressions.Regex _xssRegex =
+            new System.Text.RegularExpressions.Regex(
+                @"(?i)<(script|iframe|object|embed|svg).*?>|javascript:|on(load|error|mouseover|focus|click)\s*=",
+                System.Text.RegularExpressions.RegexOptions.Compiled);
 
         public InspectionResult Analyze(InspectionRequest request)
         {
