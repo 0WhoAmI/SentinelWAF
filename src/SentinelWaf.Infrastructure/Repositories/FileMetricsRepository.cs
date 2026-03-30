@@ -1,4 +1,5 @@
 ﻿using SentinelWaf.Application.Interfaces;
+using SentinelWaf.Domain.Helpers;
 using SentinelWaf.Domain.Models;
 
 namespace SentinelWaf.Infrastructure.Metrics
@@ -10,7 +11,9 @@ namespace SentinelWaf.Infrastructure.Metrics
 
         public FileMetricsRepository()
         {
-            _filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "waf_performance_metrics.csv");
+            string globalOutputDir = OutputHelper.GetGlobalOutputDirectory();
+
+            _filePath = Path.Combine(globalOutputDir, "waf_performance_metrics.csv");
 
             if (!File.Exists(_filePath))
             {

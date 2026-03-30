@@ -14,40 +14,49 @@ namespace SentinelWaf.MlTrainer
 
 
             // PRZYGOTOWANIE ŚCIEŻEK
-            var (tsvPath, zipPath) = SetupDirectories();
+            var (tsvPath, infraZipPath, globalZipPath) = SetupDirectories();
 
             // OBRÓBKA DANYCH
             PrepareDataFromKaggle("Datasets\\Modified_SQL_Dataset.csv", "Datasets\\XSS_dataset.csv", tsvPath);
 
             // TRENOWANIE MODELU
-            TrainModel(tsvPath, zipPath);
+            TrainModel(tsvPath, infraZipPath, globalZipPath);
 
             Console.WriteLine("\nNaciśnij dowolny klawisz, aby zakończyć...");
             Console.ReadKey();
         }
 
-        static (string tsvPath, string zipPath) SetupDirectories()
+        static (string tsvPath, string infraZipPath, string globalZipPath) SetupDirectories()
         {
             Console.WriteLine("[1/5] Konfiguracja środowiska pracy...");
 
             string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+
+            // Wychodzimy z bin/Debug/net... do folderu projektu (tools/SentinelWaf.MlTrainer)
             string trainerProjectDir = Path.GetFullPath(Path.Combine(baseDir, @"..\..\..\"));
-            string infrastructureDir = Path.GetFullPath(Path.Combine(trainerProjectDir, @"..\..\src\SentinelWaf.Infrastructure"));
 
-            // 1. Zapis datasetu 
-            string localOutputDir = Path.Combine(trainerProjectDir, "ModelOutput");
-            Directory.CreateDirectory(localOutputDir);
-            string tsvPath = Path.Combine(localOutputDir, "dataset.tsv");
+            // Wychodzimy z tools/MlTrainer do głównego folderu z plikiem .sln (dwa piętra wyżej)
+            string solutionDir = Path.GetFullPath(Path.Combine(trainerProjectDir, @"..\..\"));
 
-            // 2. Publikacja pliku .zip do WAF-a 
+            // Konfiguracja głównego folderu "Outputs" na poziomie solucji
+            string globalOutputsDir = Path.Combine(solutionDir, "Outputs");
+            Directory.CreateDirectory(globalOutputsDir);
+
+            string tsvPath = Path.Combine(globalOutputsDir, "dataset.tsv");
+            string globalZipPath = Path.Combine(globalOutputsDir, "WafModel.zip");
+
+            // Konfiguracja folderu w infrastrukturze (dla działającego WAF-a)
+            string infrastructureDir = Path.Combine(solutionDir, "src", "SentinelWaf.Infrastructure");
             string mlModelsFolder = Path.Combine(infrastructureDir, "Detectors", "ML", "MLModels");
             Directory.CreateDirectory(mlModelsFolder);
-            string zipPath = Path.Combine(mlModelsFolder, "WafModel.zip");
 
-            Console.WriteLine($" -> Zbiór danych (TSV) zostanie zapisany w: {tsvPath}");
-            Console.WriteLine($" -> Wyuczony model (ZIP) zostanie wgrany do: {zipPath}\n");
+            string infraZipPath = Path.Combine(mlModelsFolder, "WafModel.zip");
 
-            return (tsvPath, zipPath);
+            Console.WriteLine($" -> Zbiór danych (TSV) zapisany w: {tsvPath}");
+            Console.WriteLine($" -> Model AI (ZIP) wgrany do WAF: {infraZipPath}");
+            Console.WriteLine($" -> Kopia Modelu AI (ZIP) zachowana w: {globalZipPath}\n");
+
+            return (tsvPath, infraZipPath, globalZipPath);
         }
 
         static void PrepareDataFromKaggle(string sqlCsvPath, string xssCsvPath, string outputTsvPath)
@@ -126,7 +135,7 @@ namespace SentinelWaf.MlTrainer
             dataset.Add($"{cleanPayload}\t{category}");
         }
 
-        static void TrainModel(string inputTsvPath, string outputZipPath)
+        static void TrainModel(string inputTsvPath, string outputInfraZipPath, string outputGlobalZipPath)
         {
             Console.WriteLine("\n[4/5] Budowanie potoku uczenia maszynowego (Multiclass)...");
             var mlContext = new MLContext(seed: 0);
@@ -161,8 +170,9 @@ namespace SentinelWaf.MlTrainer
             Console.WriteLine("[5/5] Trenowanie... (Dla 44 tysięcy rekordów to może zająć od kilku do kilkunastu sekund)");
             var model = pipeline.Fit(dataView);
 
-            mlContext.Model.Save(model, dataView.Schema, outputZipPath);
-            Console.WriteLine($"\n=== SUKCES! Model sztucznej inteligencji został zapisany do: {outputZipPath} ===");
+            mlContext.Model.Save(model, dataView.Schema, outputInfraZipPath);
+            File.Copy(outputInfraZipPath, outputGlobalZipPath, overwrite: true);
+            Console.WriteLine($"\n=== SUKCES! Model sztucznej inteligencji został zapisany do: {outputInfraZipPath} oraz kopia została zapisana w {outputGlobalZipPath} ===");
         }
     }
 }
